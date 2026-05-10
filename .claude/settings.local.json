@@ -22,7 +22,8 @@
       "Bash(git commit -m 'feat: add caelestia dots installer and update deps *)",
       "Bash(git commit -m 'feat: complete repo — expand shell.json, update README, add .gitignore *)",
       "WebSearch",
-      "Bash(git commit -m 'feat: robust scripts + 5 repair scripts + hardware-specific fixes *)"
+      "Bash(git commit -m 'feat: robust scripts + 5 repair scripts + hardware-specific fixes *)",
+      "Bash(git commit -m 'feat: state tracking, retry logic, health-check, Makefile fallback *)"
     ]
   }
 }
