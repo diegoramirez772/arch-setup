@@ -129,8 +129,11 @@ env = QT_QPA_PLATFORM,wayland
 env = GDK_BACKEND,wayland
 env = SDL_VIDEODRIVER,wayland
 
-# Configuración de render para GPU integrada de gama baja
-# explicit_sync=1 evita tearing, explicit_sync_kms=0 evita crashes en Stoney
+# Cursor
+env = XCURSOR_THEME,Bibata-Modern-Ice
+env = XCURSOR_SIZE,24
+
+# Render para GPU integrada de gama baja
 render {
     explicit_sync = 1
     explicit_sync_kms = 0
@@ -147,10 +150,11 @@ info "Configuración AMD guardada en $HYPR_EXTRA"
 if [ -f "$HYPR_USER_CONF" ]; then
     grep -q "amd-env.conf"    "$HYPR_USER_CONF" || echo "source = ~/.config/hypr/amd-env.conf"    >> "$HYPR_USER_CONF"
     grep -q "keybindings.conf" "$HYPR_USER_CONF" || echo "source = ~/.config/hypr/keybindings.conf" >> "$HYPR_USER_CONF"
-    grep -q "caelestia shell"  "$HYPR_USER_CONF" || echo "exec-once = caelestia shell -d"           >> "$HYPR_USER_CONF"
-    grep -q "hypridle"         "$HYPR_USER_CONF" || echo "exec-once = hypridle"                     >> "$HYPR_USER_CONF"
-    grep -q "lxpolkit"         "$HYPR_USER_CONF" || echo "exec-once = lxpolkit"                     >> "$HYPR_USER_CONF"
-    grep -q "cliphist"         "$HYPR_USER_CONF" || echo "exec-once = wl-paste --watch cliphist store" >> "$HYPR_USER_CONF"
+    grep -q "caelestia shell"  "$HYPR_USER_CONF" || echo "exec-once = caelestia shell -d"                        >> "$HYPR_USER_CONF"
+    grep -q "hypridle"         "$HYPR_USER_CONF" || echo "exec-once = hypridle"                                    >> "$HYPR_USER_CONF"
+    grep -q "lxpolkit"         "$HYPR_USER_CONF" || echo "exec-once = lxpolkit"                                    >> "$HYPR_USER_CONF"
+    grep -q "cliphist"         "$HYPR_USER_CONF" || echo "exec-once = wl-paste --watch cliphist store"             >> "$HYPR_USER_CONF"
+    grep -q "gnome-keyring"    "$HYPR_USER_CONF" || echo "exec-once = /usr/bin/gnome-keyring-daemon --start --components=secrets" >> "$HYPR_USER_CONF"
     info "hyprland.conf configurado"
 else
     warn "hyprland.conf no encontrado — agregar manualmente:"
@@ -179,6 +183,35 @@ mkdir -p "$HOME/.config/hypr"
 
 # keybindings
 [ -f "$CONFIG_DIR/hyprland-keybindings.conf" ] && cp "$CONFIG_DIR/hyprland-keybindings.conf" "$HOME/.config/hypr/keybindings.conf" && info "keybindings.conf copiado"
+
+# GTK settings — tema, cursor, iconos para apps GTK (Chrome, Thunar, file-roller, etc.)
+if [ -f "$CONFIG_DIR/gtk-settings.ini" ]; then
+    mkdir -p "$HOME/.config/gtk-3.0" "$HOME/.config/gtk-4.0"
+    cp "$CONFIG_DIR/gtk-settings.ini" "$HOME/.config/gtk-3.0/settings.ini"
+    cp "$CONFIG_DIR/gtk-settings.ini" "$HOME/.config/gtk-4.0/settings.ini"
+    # Cursor para apps X11 legacy
+    mkdir -p "$HOME/.icons/default"
+    tee "$HOME/.icons/default/index.theme" > /dev/null << 'EOF'
+[Icon Theme]
+Name=Default
+Comment=Default cursor theme
+Inherits=Bibata-Modern-Ice
+EOF
+    info "GTK settings y cursor copiados"
+fi
+
+# SDDM config — tema de pantalla de login
+if [ -f "$CONFIG_DIR/sddm.conf" ]; then
+    sudo mkdir -p /etc/sddm.conf.d
+    sudo cp "$CONFIG_DIR/sddm.conf" /etc/sddm.conf.d/arch-setup.conf
+    info "SDDM config instalado"
+fi
+
+# Instalar tema catppuccin para SDDM
+if pacman -Q sddm &>/dev/null; then
+    warn "Instalando tema SDDM catppuccin — puede tardar un momento..."
+    yay -S --needed --noconfirm catppuccin-sddm-theme-git || warn "Tema SDDM no instalado — SDDM funcionará con tema default"
+fi
 
 # ─── Resumen final ────────────────────────────────────────────────────────────
 echo ""

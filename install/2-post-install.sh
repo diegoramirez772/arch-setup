@@ -53,6 +53,7 @@ info "Instalando paquetes del stack..."
 sudo pacman -S --needed --noconfirm \
     hyprland xdg-desktop-portal-hyprland \
     hyprlock hypridle \
+    sddm \
     pipewire wireplumber pipewire-pulse pipewire-alsa pipewire-bluetooth \
     networkmanager \
     bluez bluez-utils \
@@ -65,10 +66,13 @@ sudo pacman -S --needed --noconfirm \
     file-roller \
     gvfs gvfs-mtp \
     lxpolkit \
+    gnome-keyring libsecret \
     wl-clipboard \
     wofi \
     libnotify \
     brightnessctl \
+    nwg-look \
+    qt5-wayland qt6-wayland \
     xdg-user-dirs \
     udisks2 \
     grub os-prober \
@@ -91,8 +95,11 @@ info "Habilitando servicios..."
 sudo systemctl enable --now NetworkManager
 sudo systemctl enable --now bluetooth
 sudo systemctl enable --now pipewire pipewire-pulse wireplumber
-# Crear carpeta de screenshots
+sudo systemctl enable sddm
 mkdir -p "$HOME/Pictures/Screenshots"
+# Agregar usuario a grupos necesarios
+sudo usermod -aG input,storage "$(whoami)"
+info "Usuario agregado a grupos input y storage"
 
 # ─── 8. Driver WiFi Realtek 8821CE ───────────────────────────────────────────
 info "Instalando driver WiFi Realtek 8821CE..."
@@ -137,12 +144,15 @@ else
 fi
 
 # ─── 10. Paquetes AUR — rápidos (binarios, sin compilación larga) ─────────────
-info "Instalando paquetes AUR (fuentes, cli, chrome, elm)..."
+info "Instalando paquetes AUR (fuentes, cli, chrome, elm, cursor, wlogout)..."
 yay -S --needed --noconfirm \
     google-chrome \
     elm-bin \
     caelestia-cli \
     cliphist \
+    wlogout \
+    bibata-cursor-theme \
+    swww \
     ttf-material-symbols-variable-git \
     caskaydia-cove-nerd \
     ttf-rubik

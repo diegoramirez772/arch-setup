@@ -27,7 +27,9 @@
       "Bash(git config *)",
       "Read(//c/Users/ferch/**)",
       "Bash(git commit -m 'feat: complete desktop setup — all apps, keybindings, git two accounts *)",
-      "Bash(git commit -m 'fix: bugs críticos + 5 repair scripts nuevos *)"
+      "Bash(git commit -m 'fix: bugs críticos + 5 repair scripts nuevos *)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(git commit -m 'feat: SDDM, cursor, gnome-keyring, GTK theming, wlogout, qt5-wayland *)"
     ]
   }
 }
