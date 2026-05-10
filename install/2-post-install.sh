@@ -66,8 +66,11 @@ sudo pacman -S --needed --noconfirm \
     gvfs gvfs-mtp \
     lxpolkit \
     wl-clipboard \
+    wofi \
+    libnotify \
     brightnessctl \
     xdg-user-dirs \
+    udisks2 \
     grub os-prober \
     mesa xf86-video-amdgpu \
     noto-fonts noto-fonts-emoji \
@@ -79,6 +82,9 @@ sudo pacman -S --needed --noconfirm \
 
 # Crear directorios estándar del usuario (Documents, Downloads, Music, Videos, etc.)
 xdg-user-dirs-update
+
+# Habilitar udisks2 para automontaje de USB
+sudo systemctl enable --now udisks2
 
 # ─── 7. Habilitar servicios ───────────────────────────────────────────────────
 info "Habilitando servicios..."
@@ -130,31 +136,35 @@ else
     warn "No se encontró GRUB_CMDLINE_LINUX_DEFAULT — agregar manualmente: amdgpu.dc=1 acpi_backlight=native iommu=pt"
 fi
 
-# ─── 10. Paquetes AUR del stack ───────────────────────────────────────────────
-info "Instalando paquetes AUR..."
+# ─── 10. Paquetes AUR — rápidos (binarios, sin compilación larga) ─────────────
+info "Instalando paquetes AUR (fuentes, cli, chrome, elm)..."
 yay -S --needed --noconfirm \
-    caelestia-shell \
-    caelestia-cli \
     google-chrome \
     elm-bin \
+    caelestia-cli \
     cliphist \
     ttf-material-symbols-variable-git \
     caskaydia-cove-nerd \
     ttf-rubik
-# Las dependencias de runtime de caelestia (quickshell, libcava, etc.)
-# se instalan en 3-caelestia-setup.sh para mantener este script liviano
 
-# ─── 11. Instalar nvm + Node.js LTS ──────────────────────────────────────────
-info "Instalando nvm..."
-if [ ! -d "$HOME/.nvm" ]; then
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    nvm install --lts
-    nvm use --lts
-    info "Node.js LTS instalado: $(node --version)"
+# caelestia-shell compila desde fuente con CMake — puede tardar 10-20 min en este CPU
+warn "Instalando caelestia-shell — puede tardar 10-20 minutos en el E2-9000, es normal..."
+yay -S --needed --noconfirm caelestia-shell
+info "caelestia-shell instalado"
+
+# ─── 11. Node.js via nvm.fish (compatible nativo con fish shell) ──────────────
+# nvm bash NO funciona en fish — usamos nvm.fish que es nativo
+info "Instalando fisher + nvm.fish + Node.js LTS..."
+if fish -c "type nvm" &>/dev/null; then
+    info "nvm.fish ya instalado — saltando"
 else
-    info "nvm ya instalado — saltando"
+    fish -c "
+        curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
+        fisher install jorgebucaran/fisher
+        fisher install jorgebucaran/nvm.fish
+        nvm install lts
+        nvm use lts
+    " && info "Node.js LTS instalado via nvm.fish" || warn "nvm.fish falló — correr: bash install/repair/fix-node.sh"
 fi
 
 # ─── 12. VS Code (opcional) ───────────────────────────────────────────────────
