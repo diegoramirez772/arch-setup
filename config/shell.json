@@ -1,13 +1,68 @@
 {
-  "// nota": "Config base de caelestia-shell. Ver README oficial: https://github.com/caelestia-dots/shell",
-  "// completar": "Ajustar según preferencias después de instalar. Muchas opciones se configuran desde la UI de caelestia.",
+  "appearance": {
+    "font": {
+      "family": "Caskaydia Cove Nerd Font",
+      "size": 13
+    },
+    "transparency": 0.85,
+    "animations": true
+  },
 
-  "wallpaper": {
-    "path": "~/Pictures/Wallpapers"
+  "general": {
+    "terminal": "foot",
+    "fileManager": "thunar",
+    "battery": {
+      "warnAt": 20,
+      "criticalAt": 10
+    },
+    "idle": {
+      "timeout": 300
+    }
   },
 
   "bar": {
-    "position": "top"
+    "position": "top",
+    "workspaces": {
+      "count": 8
+    },
+    "clock": {
+      "format": "%H:%M  %d/%m/%Y"
+    },
+    "tray": true
+  },
+
+  "dashboard": {
+    "media": true,
+    "performance": true,
+    "weather": {
+      "enabled": false
+    }
+  },
+
+  "launcher": {
+    "enabled": true
+  },
+
+  "notifs": {
+    "enabled": true,
+    "position": "top-right",
+    "timeout": 5000
+  },
+
+  "services": {
+    "audio": {
+      "backend": "pipewire"
+    },
+    "brightness": {
+      "backend": "brightnessctl"
+    },
+    "gpu": {
+      "enabled": false
+    }
+  },
+
+  "wallpaper": {
+    "path": "~/Pictures/Wallpapers"
   },
 
   "scheme": {

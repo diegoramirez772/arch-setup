@@ -1,0 +1,10 @@
+# wallpapers no se versionen (pueden ser pesados)
+wallpapers/*
+!wallpapers/.gitkeep
+
+# archivos de sistema
+.DS_Store
+Thumbs.db
+
+# logs
+*.log

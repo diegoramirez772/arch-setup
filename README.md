@@ -44,9 +44,19 @@ Sirve como guía de instalación, respaldo en USB y contexto de hardware para fu
 
 1. Leer [`docs/dual-boot.md`](docs/dual-boot.md) completo antes de tocar el disco
 2. Seguir [`install/1-archinstall-guide.md`](install/1-archinstall-guide.md) para instalar la base
-3. Correr [`install/2-post-install.sh`](install/2-post-install.sh) para instalar el stack completo
-4. Ante cualquier problema de WiFi: [`docs/wifi-fix.md`](docs/wifi-fix.md)
-5. Cuando Arch convenza y quieras eliminar Windows: [`docs/expand-arch.md`](docs/expand-arch.md)
+3. Clonar este repo y correr el primer script:
+   ```bash
+   git clone https://github.com/diegoramirez772/arch-setup.git
+   cd arch-setup
+   bash install/2-post-install.sh
+   ```
+4. Correr el segundo script para caelestia + dots:
+   ```bash
+   bash install/3-caelestia-setup.sh
+   ```
+5. Reiniciar: `sudo reboot`
+6. Ante cualquier problema de WiFi: [`docs/wifi-fix.md`](docs/wifi-fix.md)
+7. Cuando Arch convenza y quieras eliminar Windows: [`docs/expand-arch.md`](docs/expand-arch.md)
 
 ---
 
