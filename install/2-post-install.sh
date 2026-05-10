@@ -56,7 +56,7 @@ sudo pacman -S --needed --noconfirm \
     sddm \
     pipewire wireplumber pipewire-pulse pipewire-alsa pipewire-bluetooth \
     networkmanager \
-    bluez bluez-utils \
+    bluez bluez-utils blueman \
     foot thunar thunar-volman tumbler \
     pavucontrol \
     fish tmux \
@@ -74,7 +74,12 @@ sudo pacman -S --needed --noconfirm \
     nwg-look \
     qt5-wayland qt6-wayland \
     xdg-user-dirs \
+    xdg-utils \
     udisks2 \
+    power-profiles-daemon \
+    reflector \
+    pacman-contrib \
+    eza \
     grub os-prober \
     mesa xf86-video-amdgpu \
     noto-fonts noto-fonts-emoji \
@@ -95,6 +100,7 @@ info "Habilitando servicios..."
 sudo systemctl enable --now NetworkManager
 sudo systemctl enable --now bluetooth
 sudo systemctl enable --now pipewire pipewire-pulse wireplumber
+sudo systemctl enable --now power-profiles-daemon
 sudo systemctl enable sddm
 mkdir -p "$HOME/Pictures/Screenshots"
 # Agregar usuario a grupos necesarios

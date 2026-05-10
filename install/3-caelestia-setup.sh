@@ -184,6 +184,20 @@ mkdir -p "$HOME/.config/hypr"
 # keybindings
 [ -f "$CONFIG_DIR/hyprland-keybindings.conf" ] && cp "$CONFIG_DIR/hyprland-keybindings.conf" "$HOME/.config/hypr/keybindings.conf" && info "keybindings.conf copiado"
 
+# fish config — aliases, abreviaciones, env vars
+if [ -f "$CONFIG_DIR/fish/config.fish" ]; then
+    mkdir -p "$HOME/.config/fish"
+    cp "$CONFIG_DIR/fish/config.fish" "$HOME/.config/fish/config.fish"
+    info "fish/config.fish copiado"
+fi
+
+# mimeapps.list — asociaciones de archivos (xdg-open)
+if [ -f "$CONFIG_DIR/mimeapps.list" ]; then
+    mkdir -p "$HOME/.config"
+    cp "$CONFIG_DIR/mimeapps.list" "$HOME/.config/mimeapps.list"
+    info "mimeapps.list copiado"
+fi
+
 # GTK settings — tema, cursor, iconos para apps GTK (Chrome, Thunar, file-roller, etc.)
 if [ -f "$CONFIG_DIR/gtk-settings.ini" ]; then
     mkdir -p "$HOME/.config/gtk-3.0" "$HOME/.config/gtk-4.0"

@@ -1,0 +1,66 @@
+# ~/.config/mimeapps.list — asociaciones de tipos de archivo
+# Copiado por 3-caelestia-setup.sh
+# Hace que xdg-open use las apps correctas del stack
+
+[Default Applications]
+# Video
+video/mp4=mpv.desktop
+video/x-matroska=mpv.desktop
+video/webm=mpv.desktop
+video/x-msvideo=mpv.desktop
+video/quicktime=mpv.desktop
+video/ogg=mpv.desktop
+video/mpeg=mpv.desktop
+
+# Audio
+audio/mpeg=mpv.desktop
+audio/ogg=mpv.desktop
+audio/flac=mpv.desktop
+audio/x-wav=mpv.desktop
+audio/mp4=mpv.desktop
+
+# Imágenes
+image/jpeg=imv.desktop
+image/png=imv.desktop
+image/gif=imv.desktop
+image/webp=imv.desktop
+image/bmp=imv.desktop
+image/tiff=imv.desktop
+image/svg+xml=imv.desktop
+
+# PDFs y documentos
+application/pdf=org.pwmt.zathura.desktop
+
+# Archivos comprimidos
+application/zip=thunar.desktop
+application/x-tar=thunar.desktop
+application/x-bzip2=thunar.desktop
+application/x-gzip=thunar.desktop
+application/x-xz=thunar.desktop
+application/x-7z-compressed=thunar.desktop
+application/x-rar=thunar.desktop
+
+# Texto plano y código
+text/plain=foot.desktop
+text/html=google-chrome.desktop
+text/markdown=foot.desktop
+text/x-python=foot.desktop
+text/x-shellscript=foot.desktop
+
+# Web
+x-scheme-handler/http=google-chrome.desktop
+x-scheme-handler/https=google-chrome.desktop
+x-scheme-handler/about=google-chrome.desktop
+x-scheme-handler/mailto=google-chrome.desktop
+
+# Directorios
+inode/directory=thunar.desktop
+
+[Added Associations]
+video/mp4=mpv.desktop
+video/x-matroska=mpv.desktop
+image/jpeg=imv.desktop
+image/png=imv.desktop
+application/pdf=org.pwmt.zathura.desktop
+x-scheme-handler/http=google-chrome.desktop
+x-scheme-handler/https=google-chrome.desktop

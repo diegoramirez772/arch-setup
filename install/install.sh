@@ -127,6 +127,10 @@ info "Internet: OK"
 
 # ─── Pasos de instalación ─────────────────────────────────────────────────────
 section "PASO 1/6 — Sistema base"
+run_step "reflector"  "Optimizar mirrors de pacman"    bash -c "
+    sudo pacman -S --needed --noconfirm reflector
+    sudo reflector --country Mexico,US --age 24 --sort rate --latest 10 --save /etc/pacman.d/mirrorlist
+" || warn "reflector falló — usando mirrors por defecto"
 run_step "syu"      "Actualizar sistema"               bash -c "sudo pacman -Syu --noconfirm"
 run_step "base-dev" "Instalar git y base-devel"        bash -c "sudo pacman -S --needed --noconfirm git base-devel"
 
@@ -140,19 +144,30 @@ run_step "yay"      "Instalar yay"                     bash -c "
 section "PASO 3/6 — Paquetes del stack"
 run_step "pacman-pkgs" "Instalar paquetes pacman"      bash -c "sudo pacman -S --needed --noconfirm \
     hyprland xdg-desktop-portal-hyprland \
-    pipewire wireplumber pipewire-pulse pipewire-alsa \
-    networkmanager bluez bluez-utils \
-    foot thunar pavucontrol \
-    fish grim slurp \
+    hyprlock hypridle sddm \
+    pipewire wireplumber pipewire-pulse pipewire-alsa pipewire-bluetooth \
+    networkmanager bluez bluez-utils blueman \
+    foot thunar thunar-volman tumbler pavucontrol \
+    fish grim slurp swappy \
+    mpv imv zathura zathura-pdf-mupdf \
+    gvfs gvfs-mtp file-roller \
+    lxpolkit gnome-keyring libsecret \
+    wl-clipboard wofi libnotify brightnessctl \
+    nwg-look qt5-wayland qt6-wayland \
+    xdg-user-dirs xdg-utils udisks2 \
+    power-profiles-daemon reflector pacman-contrib eza \
     grub os-prober \
     mesa xf86-video-amdgpu \
     noto-fonts noto-fonts-emoji ttf-liberation \
-    wget curl unzip htop zram-generator"
+    openssh wget curl unzip htop zram-generator"
 
 run_step "services"    "Habilitar servicios"           bash -c "
     sudo systemctl enable --now NetworkManager
     sudo systemctl enable --now bluetooth
     sudo systemctl enable --now pipewire pipewire-pulse wireplumber
+    sudo systemctl enable --now power-profiles-daemon
+    sudo systemctl enable sddm
+    sudo systemctl enable --now udisks2
 "
 
 section "PASO 4/6 — WiFi + drivers AMD"
