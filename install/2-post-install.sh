@@ -52,6 +52,7 @@ fi
 info "Instalando paquetes del stack..."
 sudo pacman -S --needed --noconfirm \
     hyprland \
+    xdg-desktop-portal-hyprland \
     pipewire wireplumber pipewire-pulse pipewire-alsa \
     networkmanager \
     foot \
@@ -65,7 +66,8 @@ sudo pacman -S --needed --noconfirm \
     noto-fonts noto-fonts-emoji \
     ttf-liberation \
     wget curl unzip \
-    htop
+    htop \
+    zram-generator
 
 # ─── 7. Habilitar servicios ───────────────────────────────────────────────────
 info "Habilitando servicios..."
@@ -94,6 +96,8 @@ yay -S --needed --noconfirm \
     caskaydia-cove-nerd \
     ttf-rubik \
     swappy
+# Las dependencias de runtime de caelestia (quickshell, libcava, etc.)
+# se instalan en 3-caelestia-setup.sh para mantener este script liviano
 
 # ─── 10. Instalar nvm + Node.js LTS ──────────────────────────────────────────
 info "Instalando nvm..."
@@ -134,7 +138,6 @@ mkdir -p "$HOME/Pictures/Wallpapers"
 
 # ─── 14. Configurar zram (swap en RAM — mejora rendimiento en HDD) ────────────
 info "Configurando zram..."
-sudo pacman -S --needed --noconfirm zram-generator
 sudo tee /etc/systemd/zram-generator.conf > /dev/null << 'EOF'
 [zram0]
 zram-size = ram / 2
@@ -159,8 +162,8 @@ echo -e "${GREEN}  Instalación completada                ${NC}"
 echo -e "${GREEN}════════════════════════════════════════${NC}"
 echo ""
 echo "Próximos pasos:"
-echo "  1. Reiniciar: sudo reboot"
-echo "  2. Al volver a logear, caelestia-shell debería arrancar con Hyprland"
+echo "  1. Correr: bash install/3-caelestia-setup.sh"
+echo "  2. Reiniciar: sudo reboot"
 echo "  3. Si el WiFi no funciona: ver docs/wifi-fix.md"
 echo "  4. Para cambiar wallpaper: caelestia wallpaper set ~/Pictures/Wallpapers/foto.jpg"
 echo ""
