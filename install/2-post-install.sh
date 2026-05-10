@@ -77,17 +77,47 @@ sudo systemctl enable --now pipewire pipewire-pulse wireplumber
 
 # ─── 8. Driver WiFi Realtek 8821CE ───────────────────────────────────────────
 info "Instalando driver WiFi Realtek 8821CE..."
-yay -S --needed --noconfirm rtl8821ce-dkms
-sudo modprobe 8821ce || warn "No se pudo cargar el módulo ahora — reiniciar para activarlo"
 
-# Fix de power management del WiFi (se desconecta solo sin esto)
+# Blacklist del driver rtw88 que viene en el kernel y entra en conflicto
+sudo tee /etc/modprobe.d/blacklist-rtw88.conf > /dev/null << 'EOF'
+blacklist rtw88_8821ce
+blacklist rtw88_core
+blacklist rtw88_pci
+EOF
+
+# Usar rtl8821ce-dkms-git (más actualizado que rtl8821ce-dkms, mejor soporte kernel reciente)
+yay -S --needed --noconfirm rtl8821ce-dkms-git
+sudo modprobe rtl8821ce || warn "No se pudo cargar el módulo ahora — reiniciar para activarlo"
+
+# Fix de power management del WiFi (se desconecta solo sin esto en IdeaPad 330)
 sudo tee /etc/NetworkManager/conf.d/wifi-powersave.conf > /dev/null << 'EOF'
 [connection]
 wifi.powersave = 2
 EOF
 sudo systemctl restart NetworkManager
 
-# ─── 9. Paquetes AUR del stack ────────────────────────────────────────────────
+# ─── 9. Parámetros de kernel para AMD Radeon R2 (Stoney Ridge) ───────────────
+info "Configurando parámetros de kernel para AMD Radeon R2..."
+
+# kfd_disabled=1: Stoney Ridge no soporta KFD, sin esto puede causar errores al arrancar
+sudo tee /etc/modprobe.d/amdgpu.conf > /dev/null << 'EOF'
+options amdgpu kfd_disabled=1
+EOF
+
+# Parámetros GRUB:
+# amdgpu.dc=1       — habilita Display Core para Stoney (necesario para Hyprland)
+# acpi_backlight=native — fix de congelación gráfica conocido en IdeaPad 330
+# iommu=pt          — mejora rendimiento de la GPU integrada
+GRUB_FILE="/etc/default/grub"
+if grep -q "GRUB_CMDLINE_LINUX_DEFAULT" "$GRUB_FILE"; then
+    sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="\(.*\)"/GRUB_CMDLINE_LINUX_DEFAULT="\1 amdgpu.dc=1 acpi_backlight=native iommu=pt"/' "$GRUB_FILE"
+    info "Parámetros de kernel AMD agregados a GRUB"
+    sudo grub-mkconfig -o /boot/grub/grub.cfg
+else
+    warn "No se encontró GRUB_CMDLINE_LINUX_DEFAULT — agregar manualmente: amdgpu.dc=1 acpi_backlight=native iommu=pt"
+fi
+
+# ─── 10. Paquetes AUR del stack ───────────────────────────────────────────────
 info "Instalando caelestia-shell y fuentes desde AUR..."
 yay -S --needed --noconfirm \
     caelestia-shell \
@@ -99,7 +129,7 @@ yay -S --needed --noconfirm \
 # Las dependencias de runtime de caelestia (quickshell, libcava, etc.)
 # se instalan en 3-caelestia-setup.sh para mantener este script liviano
 
-# ─── 10. Instalar nvm + Node.js LTS ──────────────────────────────────────────
+# ─── 11. Instalar nvm + Node.js LTS ──────────────────────────────────────────
 info "Instalando nvm..."
 if [ ! -d "$HOME/.nvm" ]; then
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
@@ -112,7 +142,7 @@ else
     info "nvm ya instalado — saltando"
 fi
 
-# ─── 11. VS Code (opcional) ───────────────────────────────────────────────────
+# ─── 12. VS Code (opcional) ───────────────────────────────────────────────────
 echo ""
 read -rp "¿Instalar VS Code? (s/N): " install_vscode
 if [[ "$install_vscode" =~ ^[Ss]$ ]]; then
@@ -120,7 +150,7 @@ if [[ "$install_vscode" =~ ^[Ss]$ ]]; then
     yay -S --needed --noconfirm visual-studio-code-bin
 fi
 
-# ─── 12. Copiar config de caelestia ──────────────────────────────────────────
+# ─── 13. Copiar config de caelestia ──────────────────────────────────────────
 info "Copiando config de caelestia..."
 mkdir -p "$HOME/.config/caelestia"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -131,12 +161,12 @@ else
     warn "config/shell.json no encontrado — configurar caelestia manualmente"
 fi
 
-# ─── 13. Crear carpetas de trabajo ───────────────────────────────────────────
+# ─── 14. Crear carpetas de trabajo ───────────────────────────────────────────
 info "Creando carpetas..."
 mkdir -p "$HOME/dev"
 mkdir -p "$HOME/Pictures/Wallpapers"
 
-# ─── 14. Configurar zram (swap en RAM — mejora rendimiento en HDD) ────────────
+# ─── 15. Configurar zram (swap en RAM — mejora rendimiento en HDD) ────────────
 info "Configurando zram..."
 sudo tee /etc/systemd/zram-generator.conf > /dev/null << 'EOF'
 [zram0]
@@ -146,7 +176,7 @@ EOF
 sudo systemctl daemon-reload
 sudo systemctl start systemd-zram-setup@zram0 || warn "zram se activará al reiniciar"
 
-# ─── 15. Cambiar shell por defecto a fish ────────────────────────────────────
+# ─── 16. Cambiar shell por defecto a fish ────────────────────────────────────
 info "Cambiando shell a fish..."
 if [ "$(basename "$SHELL")" != "fish" ]; then
     chsh -s "$(which fish)"

@@ -16,7 +16,13 @@
       "Bash(git init *)",
       "Bash(git remote *)",
       "Bash(git add *)",
-      "Bash(git commit -m 'feat: initial repo structure with hardware-specific config *)"
+      "Bash(git commit -m 'feat: initial repo structure with hardware-specific config *)",
+      "Bash(git push *)",
+      "WebFetch(domain:github.com)",
+      "Bash(git commit -m 'feat: add caelestia dots installer and update deps *)",
+      "Bash(git commit -m 'feat: complete repo — expand shell.json, update README, add .gitignore *)",
+      "WebSearch",
+      "Bash(git commit -m 'feat: robust scripts + 5 repair scripts + hardware-specific fixes *)"
     ]
   }
 }

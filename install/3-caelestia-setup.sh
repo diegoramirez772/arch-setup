@@ -28,7 +28,7 @@ fi
 # ─── Dependencias adicionales que necesita caelestia-shell en runtime ─────────
 info "Instalando dependencias de runtime de caelestia-shell..."
 yay -S --needed --noconfirm \
-    quickshell-git \
+    quickshell \
     app2unit \
     aubio \
     libcava \
@@ -114,22 +114,51 @@ else
     fish install.fish
 fi
 
-# ─── Configurar autostart de caelestia en Hyprland ───────────────────────────
-info "Configurando autostart de caelestia en Hyprland..."
+# ─── Configurar autostart y variables de entorno en Hyprland ─────────────────
+info "Configurando Hyprland para AMD Radeon R2..."
 HYPR_USER_CONF="$HOME/.config/hypr/hyprland.conf"
 
-# caelestia dots ya incluye hyprland.conf — verificar que el autostart esté
+# Variables de entorno obligatorias para AMD integrado en Wayland
+HYPR_EXTRA="$HOME/.config/hypr/amd-env.conf"
+tee "$HYPR_EXTRA" > /dev/null << 'EOF'
+# Variables de entorno para AMD Radeon R2 (Stoney Ridge) + Wayland
+env = LIBVA_DRIVER_NAME,radeonsi
+env = AQ_DRM_DEVICES,/dev/dri/card0
+env = MESA_DEBUG,quiet
+env = QT_QPA_PLATFORM,wayland
+env = GDK_BACKEND,wayland
+env = SDL_VIDEODRIVER,wayland
+
+# Configuración de render para GPU integrada de gama baja
+# explicit_sync=1 evita tearing, explicit_sync_kms=0 evita crashes en Stoney
+render {
+    explicit_sync = 1
+    explicit_sync_kms = 0
+}
+
+misc {
+    disable_hyprland_logo = true
+    enable_hyprcursor = false
+}
+EOF
+info "Configuración AMD guardada en $HYPR_EXTRA"
+
+# caelestia dots ya incluye hyprland.conf — agregar source de nuestro archivo AMD
 if [ -f "$HYPR_USER_CONF" ]; then
-    if ! grep -q "caelestia shell" "$HYPR_USER_CONF"; then
+    if ! grep -q "amd-env.conf" "$HYPR_USER_CONF"; then
         echo "" >> "$HYPR_USER_CONF"
-        echo "# Autostart caelestia shell" >> "$HYPR_USER_CONF"
+        echo "# Config AMD Radeon R2 — generado por arch-setup" >> "$HYPR_USER_CONF"
+        echo "source = ~/.config/hypr/amd-env.conf" >> "$HYPR_USER_CONF"
+    fi
+    if ! grep -q "caelestia shell" "$HYPR_USER_CONF"; then
         echo "exec-once = caelestia shell -d" >> "$HYPR_USER_CONF"
-        info "Autostart agregado a hyprland.conf"
+        info "Autostart de caelestia agregado"
     else
-        info "Autostart ya presente en hyprland.conf — saltando"
+        info "Autostart ya presente — saltando"
     fi
 else
     warn "hyprland.conf no encontrado — agregar manualmente:"
+    warn "  source = ~/.config/hypr/amd-env.conf"
     warn "  exec-once = caelestia shell -d"
 fi
 

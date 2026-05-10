@@ -44,19 +44,25 @@ Sirve como guía de instalación, respaldo en USB y contexto de hardware para fu
 
 1. Leer [`docs/dual-boot.md`](docs/dual-boot.md) completo antes de tocar el disco
 2. Seguir [`install/1-archinstall-guide.md`](install/1-archinstall-guide.md) para instalar la base
-3. Clonar este repo y correr el primer script:
+3. Clonar este repo y correr el instalador maestro:
    ```bash
    git clone https://github.com/diegoramirez772/arch-setup.git
    cd arch-setup
-   bash install/2-post-install.sh
+   bash install/install.sh
    ```
-4. Correr el segundo script para caelestia + dots:
-   ```bash
-   bash install/3-caelestia-setup.sh
-   ```
-5. Reiniciar: `sudo reboot`
-6. Ante cualquier problema de WiFi: [`docs/wifi-fix.md`](docs/wifi-fix.md)
-7. Cuando Arch convenza y quieras eliminar Windows: [`docs/expand-arch.md`](docs/expand-arch.md)
+4. Reiniciar: `sudo reboot`
+5. Ante cualquier problema usar los scripts de reparación en `install/repair/`
+6. Cuando Arch convenza y quieras eliminar Windows: [`docs/expand-arch.md`](docs/expand-arch.md)
+
+## Scripts de reparación
+
+| Problema | Script |
+|---|---|
+| WiFi no funciona | `bash install/repair/fix-wifi.sh` |
+| Hyprland no arranca / pantalla negra | `bash install/repair/fix-hyprland.sh` |
+| Sin audio | `bash install/repair/fix-audio.sh` |
+| Windows no aparece en GRUB | `bash install/repair/fix-grub.sh` |
+| caelestia-shell no arranca | `bash install/repair/fix-caelestia.sh` |
 
 ---
 
