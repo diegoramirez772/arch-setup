@@ -23,7 +23,10 @@
       "Bash(git commit -m 'feat: complete repo — expand shell.json, update README, add .gitignore *)",
       "WebSearch",
       "Bash(git commit -m 'feat: robust scripts + 5 repair scripts + hardware-specific fixes *)",
-      "Bash(git commit -m 'feat: state tracking, retry logic, health-check, Makefile fallback *)"
+      "Bash(git commit -m 'feat: state tracking, retry logic, health-check, Makefile fallback *)",
+      "Bash(git config *)",
+      "Read(//c/Users/ferch/**)",
+      "Bash(git commit -m 'feat: complete desktop setup — all apps, keybindings, git two accounts *)"
     ]
   }
 }

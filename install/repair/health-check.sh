@@ -128,6 +128,23 @@ else
     warn "os-prober deshabilitado — Windows puede no aparecer en GRUB"
 fi
 
+# ─── Apps de escritorio ───────────────────────────────────────────────────────
+echo ""
+echo "Apps:"
+for pkg in google-chrome mpv imv zathura file-roller hyprlock hypridle lxpolkit; do
+    if pacman -Q "$pkg" &>/dev/null || yay -Q "$pkg" &>/dev/null 2>/dev/null; then
+        ok "$pkg instalado"
+    else
+        warn "$pkg no instalado"
+    fi
+done
+
+if pacman -Q gvfs &>/dev/null; then
+    ok "gvfs instalado (automontaje USB)"
+else
+    fail "gvfs no instalado — pendrives no van a aparecer en Thunar"
+fi
+
 # ─── Dev setup ────────────────────────────────────────────────────────────────
 echo ""
 echo "Dev:"
@@ -137,17 +154,31 @@ else
     warn "nvm no encontrado en ~/.nvm"
 fi
 
-if [ -d "$HOME/dev" ]; then
-    ok "carpeta ~/dev creada"
+if command -v elm &>/dev/null || yay -Q elm-bin &>/dev/null 2>/dev/null; then
+    ok "elm instalado"
 else
-    warn "carpeta ~/dev no existe"
+    warn "elm no instalado"
 fi
 
-if [ -d "$HOME/Pictures/Wallpapers" ]; then
-    ok "carpeta ~/Pictures/Wallpapers creada"
+if command -v tmux &>/dev/null; then
+    ok "tmux instalado"
 else
-    warn "carpeta ~/Pictures/Wallpapers no existe"
+    warn "tmux no instalado"
 fi
+
+if [ -f "$HOME/.ssh/id_ed25519_personal" ] && [ -f "$HOME/.ssh/id_ed25519_school" ]; then
+    ok "SSH keys dos cuentas configuradas"
+else
+    warn "SSH keys no configuradas — correr: bash install/setup-git.sh"
+fi
+
+for dir in dev school "Pictures/Wallpapers" "Pictures/Screenshots" Documents Downloads Music Videos; do
+    if [ -d "$HOME/$dir" ]; then
+        ok "~/$dir existe"
+    else
+        warn "~/$dir no existe"
+    fi
+done
 
 # ─── Resultado ────────────────────────────────────────────────────────────────
 echo ""

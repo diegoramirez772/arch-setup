@@ -214,8 +214,18 @@ run_step "fish-shell" "Cambiar shell a fish"           bash -c "
     if [ \"\$(basename \$SHELL)\" != 'fish' ]; then chsh -s \$(which fish); fi
 "
 
-section "PASO 6/6 — Caelestia"
+section "PASO 6/7 — Caelestia"
 run_step "caelestia"  "Instalar caelestia dots"        bash "$SCRIPT_DIR/3-caelestia-setup.sh"
+
+section "PASO 7/7 — Git dos cuentas"
+if ! step_done "git-setup"; then
+    read -rp "¿Configurar Git (dos cuentas SSH)? (S/n): " setup_git
+    if [[ ! "$setup_git" =~ ^[Nn]$ ]]; then
+        run_step "git-setup" "Configurar Git + SSH dos cuentas" bash "$SCRIPT_DIR/setup-git.sh"
+    else
+        mark_done "git-setup"
+    fi
+fi
 
 # ─── VS Code (siempre opcional, no bloquea) ───────────────────────────────────
 if ! step_done "vscode"; then

@@ -143,32 +143,42 @@ misc {
 EOF
 info "Configuración AMD guardada en $HYPR_EXTRA"
 
-# caelestia dots ya incluye hyprland.conf — agregar source de nuestro archivo AMD
+# caelestia dots ya incluye hyprland.conf — agregar sources y autostarts
 if [ -f "$HYPR_USER_CONF" ]; then
-    if ! grep -q "amd-env.conf" "$HYPR_USER_CONF"; then
-        echo "" >> "$HYPR_USER_CONF"
-        echo "# Config AMD Radeon R2 — generado por arch-setup" >> "$HYPR_USER_CONF"
-        echo "source = ~/.config/hypr/amd-env.conf" >> "$HYPR_USER_CONF"
-    fi
-    if ! grep -q "caelestia shell" "$HYPR_USER_CONF"; then
-        echo "exec-once = caelestia shell -d" >> "$HYPR_USER_CONF"
-        info "Autostart de caelestia agregado"
-    else
-        info "Autostart ya presente — saltando"
-    fi
+    grep -q "amd-env.conf"    "$HYPR_USER_CONF" || echo "source = ~/.config/hypr/amd-env.conf"    >> "$HYPR_USER_CONF"
+    grep -q "keybindings.conf" "$HYPR_USER_CONF" || echo "source = ~/.config/hypr/keybindings.conf" >> "$HYPR_USER_CONF"
+    grep -q "caelestia shell"  "$HYPR_USER_CONF" || echo "exec-once = caelestia shell -d"           >> "$HYPR_USER_CONF"
+    grep -q "hypridle"         "$HYPR_USER_CONF" || echo "exec-once = hypridle"                     >> "$HYPR_USER_CONF"
+    grep -q "lxpolkit"         "$HYPR_USER_CONF" || echo "exec-once = lxpolkit"                     >> "$HYPR_USER_CONF"
+    grep -q "cliphist"         "$HYPR_USER_CONF" || echo "exec-once = wl-paste --watch cliphist store" >> "$HYPR_USER_CONF"
+    info "hyprland.conf configurado"
 else
     warn "hyprland.conf no encontrado — agregar manualmente:"
     warn "  source = ~/.config/hypr/amd-env.conf"
+    warn "  source = ~/.config/hypr/keybindings.conf"
     warn "  exec-once = caelestia shell -d"
+    warn "  exec-once = hypridle"
+    warn "  exec-once = lxpolkit"
 fi
 
-# ─── Copiar nuestra shell.json encima de la default ──────────────────────────
+# ─── Copiar configs al sistema ────────────────────────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [ -f "$SCRIPT_DIR/../config/shell.json" ]; then
-    mkdir -p "$HOME/.config/caelestia"
-    cp "$SCRIPT_DIR/../config/shell.json" "$HOME/.config/caelestia/shell.json"
-    info "shell.json copiado a ~/.config/caelestia/"
-fi
+CONFIG_DIR="$SCRIPT_DIR/../config"
+
+mkdir -p "$HOME/.config/caelestia"
+mkdir -p "$HOME/.config/hypr"
+
+# shell.json de caelestia
+[ -f "$CONFIG_DIR/shell.json" ] && cp "$CONFIG_DIR/shell.json" "$HOME/.config/caelestia/shell.json" && info "shell.json copiado"
+
+# hyprlock — pantalla de bloqueo
+[ -f "$CONFIG_DIR/hyprlock.conf" ] && cp "$CONFIG_DIR/hyprlock.conf" "$HOME/.config/hypr/hyprlock.conf" && info "hyprlock.conf copiado"
+
+# hypridle — daemon de inactividad y suspend
+[ -f "$CONFIG_DIR/hypridle.conf" ] && cp "$CONFIG_DIR/hypridle.conf" "$HOME/.config/hypr/hypridle.conf" && info "hypridle.conf copiado"
+
+# keybindings
+[ -f "$CONFIG_DIR/hyprland-keybindings.conf" ] && cp "$CONFIG_DIR/hyprland-keybindings.conf" "$HOME/.config/hypr/keybindings.conf" && info "keybindings.conf copiado"
 
 # ─── Resumen final ────────────────────────────────────────────────────────────
 echo ""

@@ -51,29 +51,42 @@ fi
 # ─── 6. Paquetes pacman del stack ─────────────────────────────────────────────
 info "Instalando paquetes del stack..."
 sudo pacman -S --needed --noconfirm \
-    hyprland \
-    xdg-desktop-portal-hyprland \
-    pipewire wireplumber pipewire-pulse pipewire-alsa \
+    hyprland xdg-desktop-portal-hyprland \
+    hyprlock hypridle \
+    pipewire wireplumber pipewire-pulse pipewire-alsa pipewire-bluetooth \
     networkmanager \
-    foot \
-    thunar \
-    pavucontrol \
-    fish \
     bluez bluez-utils \
-    grim slurp \
+    foot thunar thunar-volman tumbler \
+    pavucontrol \
+    fish tmux \
+    grim slurp swappy \
+    mpv imv \
+    zathura zathura-pdf-mupdf \
+    file-roller \
+    gvfs gvfs-mtp \
+    lxpolkit \
+    wl-clipboard \
+    brightnessctl \
+    xdg-user-dirs \
     grub os-prober \
     mesa xf86-video-amdgpu \
     noto-fonts noto-fonts-emoji \
     ttf-liberation \
+    openssh \
     wget curl unzip \
     htop \
     zram-generator
+
+# Crear directorios estándar del usuario (Documents, Downloads, Music, Videos, etc.)
+xdg-user-dirs-update
 
 # ─── 7. Habilitar servicios ───────────────────────────────────────────────────
 info "Habilitando servicios..."
 sudo systemctl enable --now NetworkManager
 sudo systemctl enable --now bluetooth
 sudo systemctl enable --now pipewire pipewire-pulse wireplumber
+# Crear carpeta de screenshots
+mkdir -p "$HOME/Pictures/Screenshots"
 
 # ─── 8. Driver WiFi Realtek 8821CE ───────────────────────────────────────────
 info "Instalando driver WiFi Realtek 8821CE..."
@@ -118,14 +131,16 @@ else
 fi
 
 # ─── 10. Paquetes AUR del stack ───────────────────────────────────────────────
-info "Instalando caelestia-shell y fuentes desde AUR..."
+info "Instalando paquetes AUR..."
 yay -S --needed --noconfirm \
     caelestia-shell \
     caelestia-cli \
+    google-chrome \
+    elm-bin \
+    cliphist \
     ttf-material-symbols-variable-git \
     caskaydia-cove-nerd \
-    ttf-rubik \
-    swappy
+    ttf-rubik
 # Las dependencias de runtime de caelestia (quickshell, libcava, etc.)
 # se instalan en 3-caelestia-setup.sh para mantener este script liviano
 
