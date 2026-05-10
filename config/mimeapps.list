@@ -40,12 +40,8 @@ application/x-xz=thunar.desktop
 application/x-7z-compressed=thunar.desktop
 application/x-rar=thunar.desktop
 
-# Texto plano y código
-text/plain=foot.desktop
+# Texto plano y código — sin asociación forzada (usa el default del sistema)
 text/html=google-chrome.desktop
-text/markdown=foot.desktop
-text/x-python=foot.desktop
-text/x-shellscript=foot.desktop
 
 # Web
 x-scheme-handler/http=google-chrome.desktop

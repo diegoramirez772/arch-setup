@@ -51,8 +51,8 @@ abbr -a ss   'sudo systemctl'
 abbr -a js   'sudo journalctl -xe'
 
 # ─── Variables de entorno ─────────────────────────────────────────────────────
-set -gx EDITOR nvim
-set -gx VISUAL nvim
+set -gx EDITOR nano
+set -gx VISUAL nano
 set -gx BROWSER google-chrome-stable
 
 # XDG dirs
