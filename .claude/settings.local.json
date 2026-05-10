@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-WmiObject Win32_Processor)",
+      "PowerShell(Get-WmiObject Win32_VideoController)",
+      "PowerShell(Get-WmiObject Win32_DiskDrive)",
+      "PowerShell(Get-WmiObject Win32_PhysicalMemory)",
+      "PowerShell(Get-BitLockerVolume)",
+      "PowerShell(manage-bde -status C:)",
+      "PowerShell(fsutil fsinfo volumeinfo C:)",
+      "PowerShell(Get-WmiObject -Namespace \"root\\\\CIMV2\\\\Security\\\\MicrosoftVolumeEncryption\" -Class Win32_EncryptableVolume -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-WmiObject Win32_LogicalDisk | Where-Object { $_.DriveType -eq 3 } | Select-Object DeviceID, @{N='TotalGB';E={[math]::Round\\($_.Size/1GB,2\\)}}, @{N='FreeGB';E={[math]::Round\\($_.FreeSpace/1GB,2\\)}}, @{N='UsedGB';E={[math]::Round\\(\\($_.Size-$_.FreeSpace\\)/1GB,2\\)}} | Format-Table -AutoSize)",
+      "PowerShell(Get-WmiObject Win32_DiskPartition)",
+      "PowerShell(Confirm-SecureBootUEFI 2>&1)",
+      "PowerShell([System.Environment]::Is64BitOperatingSystem)",
+      "Bash(git init *)",
+      "Bash(git remote *)",
+      "Bash(git add *)",
+      "Bash(git commit -m 'feat: initial repo structure with hardware-specific config *)"
+    ]
+  }
+}

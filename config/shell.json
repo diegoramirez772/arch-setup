@@ -1,0 +1,16 @@
+{
+  "// nota": "Config base de caelestia-shell. Ver README oficial: https://github.com/caelestia-dots/shell",
+  "// completar": "Ajustar según preferencias después de instalar. Muchas opciones se configuran desde la UI de caelestia.",
+
+  "wallpaper": {
+    "path": "~/Pictures/Wallpapers"
+  },
+
+  "bar": {
+    "position": "top"
+  },
+
+  "scheme": {
+    "default": "catppuccin-mocha"
+  }
+}
